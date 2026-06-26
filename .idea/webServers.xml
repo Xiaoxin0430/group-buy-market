@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="4ae0f5ae-8d5e-467f-8524-ed24c57097c2" name="服务器">
+        <fileTransfer rootFolder="/home/kemove/lixinzhe" accessType="SFTP" host="10.15.20.177" port="22" sshConfigId="6c64628e-2bb7-4e83-9203-c1d6153ba76c" sshConfig="kemove@10.15.20.177:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
