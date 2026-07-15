@@ -3,6 +3,7 @@ package cn.xx.infrastructure.dao;
 import cn.xx.infrastructure.dao.po.GroupBuyDiscount;
 import org.apache.ibatis.annotations.Mapper;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,4 +16,5 @@ public interface IGroupBuyDiscountDao {
 
     List<GroupBuyDiscount> queryGroupBuyDiscountList();
 
+    GroupBuyDiscount queryGroupBuyActivityDiscountByDiscountId(String discountId);
 }
