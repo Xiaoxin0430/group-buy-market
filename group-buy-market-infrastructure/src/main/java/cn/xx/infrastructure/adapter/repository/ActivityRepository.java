@@ -1,6 +1,7 @@
 package cn.xx.infrastructure.adapter.repository;
 
 import cn.xx.domain.activity.adapter.repository.IActivityRepository;
+import cn.xx.domain.activity.model.valobj.DiscountTypeEnum;
 import cn.xx.domain.activity.model.valobj.GroupBuyActivityDiscountVO;
 import cn.xx.domain.activity.model.valobj.SkuVO;
 import cn.xx.infrastructure.dao.IGroupBuyActivityDao;
@@ -31,6 +32,7 @@ public class ActivityRepository implements IActivityRepository {
     @Resource
     private ISkuDao skuDao;
 
+    //查询优惠活动信息，装配为vo对象
     @Override
     public GroupBuyActivityDiscountVO queryGroupBuyActivityDiscountVO(String source, String channel) {
         GroupBuyActivity groupBuyActivityReq = new GroupBuyActivity();
@@ -43,7 +45,7 @@ public class ActivityRepository implements IActivityRepository {
         GroupBuyActivityDiscountVO.GroupBuyDiscount groupBuyDiscount = GroupBuyActivityDiscountVO.GroupBuyDiscount.builder()
                 .discountName(groupBuyDiscountRes.getDiscountName())
                 .discountDesc(groupBuyDiscountRes.getDiscountDesc())
-                .discountType(groupBuyDiscountRes.getDiscountType())
+                .discountType(DiscountTypeEnum.get(groupBuyDiscountRes.getDiscountType()))
                 .marketPlan(groupBuyDiscountRes.getMarketPlan())
                 .marketExpr(groupBuyDiscountRes.getMarketExpr())
                 .tagId(groupBuyDiscountRes.getTagId())
