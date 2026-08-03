@@ -9,7 +9,7 @@ import java.util.Date;
 
 /**
  * @author xx
- * @description 拼团活动
+ * @description 拼团活动，只描述活动是什么
  * @create 2024-12-07 10:01
  */
 @Data
@@ -24,12 +24,6 @@ public class GroupBuyActivity {
     private Long activityId;
     /** 活动名称 */
     private String activityName;
-    /** 来源 */
-    private String source;
-    /** 渠道 */
-    private String channel;
-    /** 商品ID */
-    private String goodsId;
     /** 折扣ID */
     private String discountId;
     /** 拼团方式（0自动成团、1达成目标拼团） */
