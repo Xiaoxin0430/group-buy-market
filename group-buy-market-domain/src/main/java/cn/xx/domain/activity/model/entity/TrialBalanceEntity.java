@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * @author xiaoxin
- * @description 试算结果实体对象
+ * @description 试算（结果）实体对象
  * @create 2026/7/14 14:27
  */
 

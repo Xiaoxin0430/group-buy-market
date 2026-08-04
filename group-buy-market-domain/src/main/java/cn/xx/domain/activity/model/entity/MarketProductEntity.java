@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author xiaoxin
- * @description 营销商品实体信息，通过这样一个信息获取商品优惠信息
+ * @description 营销商品实体信息
  * @create 2024-12-14 13:46
  */
 @Data

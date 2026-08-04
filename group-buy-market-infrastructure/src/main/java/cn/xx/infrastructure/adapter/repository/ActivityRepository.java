@@ -1,7 +1,7 @@
 package cn.xx.infrastructure.adapter.repository;
 
 import cn.xx.domain.activity.adapter.repository.IActivityRepository;
-import cn.xx.domain.activity.model.entity.SCSkuActivityVO;
+import cn.xx.domain.activity.model.valobj.SCSkuActivityVO;
 import cn.xx.domain.activity.model.valobj.DiscountTypeEnum;
 import cn.xx.domain.activity.model.valobj.GroupBuyActivityDiscountVO;
 import cn.xx.domain.activity.model.valobj.SkuVO;
@@ -13,8 +13,9 @@ import cn.xx.infrastructure.dao.po.GroupBuyActivity;
 import cn.xx.infrastructure.dao.po.GroupBuyDiscount;
 import cn.xx.infrastructure.dao.po.SCSkuActivity;
 import cn.xx.infrastructure.dao.po.Sku;
+import cn.xx.infrastructure.redis.IRedisService;
+import org.redisson.api.RBitSet;
 import org.springframework.stereotype.Repository;
-
 import javax.annotation.Resource;
 
 /**
@@ -37,6 +38,9 @@ public class ActivityRepository implements IActivityRepository {
 
     @Resource
     private ISCSkuActivityDao scSkuActivityDao;
+
+    @Resource
+    private IRedisService redisService;
 
     //查询优惠活动信息，装配为vo对象
     @Override
@@ -83,6 +87,7 @@ public class ActivityRepository implements IActivityRepository {
                 .originalPrice(sku.getOriginalPrice())
                 .build();
     }
+
     //查询商品与活动的关联信息
     @Override
     public SCSkuActivityVO querySCSkuActivityBySCGoodsId(String source, String channel, String goodsId) {
@@ -100,5 +105,17 @@ public class ActivityRepository implements IActivityRepository {
                 .activityId(scSkuActivity.getActivityId())
                 .goodsId(scSkuActivity.getGoodsId())
                 .build();
+    }
+
+    //人群判断
+    @Override
+    public boolean isTagCrowdRange(String tagId, String userId) {
+        RBitSet bitSet = redisService.getBitSet(tagId);
+        //不存在位图中默认放行，存在就取实际的值
+        if (!bitSet.isExists()){
+            return true;
+        }
+
+        return bitSet.get(redisService.getIndexFromUserId(userId));
     }
 }

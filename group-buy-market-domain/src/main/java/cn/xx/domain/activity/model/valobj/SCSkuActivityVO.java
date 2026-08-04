@@ -1,4 +1,4 @@
-package cn.xx.domain.activity.model.entity;
+package cn.xx.domain.activity.model.valobj;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author xiaoxin
- * @description
+ * @description 商品活动关联实体
  * @create 2026/8/3 18:06
  */
 

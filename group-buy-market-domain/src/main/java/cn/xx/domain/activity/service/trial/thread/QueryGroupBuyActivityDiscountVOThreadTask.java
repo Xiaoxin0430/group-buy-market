@@ -1,7 +1,7 @@
 package cn.xx.domain.activity.service.trial.thread;
 
 import cn.xx.domain.activity.adapter.repository.IActivityRepository;
-import cn.xx.domain.activity.model.entity.SCSkuActivityVO;
+import cn.xx.domain.activity.model.valobj.SCSkuActivityVO;
 import cn.xx.domain.activity.model.valobj.GroupBuyActivityDiscountVO;
 
 import java.util.concurrent.Callable;

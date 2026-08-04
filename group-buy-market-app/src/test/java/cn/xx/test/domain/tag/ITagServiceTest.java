@@ -49,12 +49,30 @@ public class ITagServiceTest {
         );
 
         log.info(
-                "gudebai 不存在，预期结果为 false，测试结果:{}",
+                "dacihua 不存在，预期结果为 false，测试结果:{}",
                 bitSet.get(
-                        redisService.getIndexFromUserId(
-                                "gudebai"
-                        )
+                        redisService.getIndexFromUserId("gudebai")
                 )
         );
+    }
+
+    @Test
+    public void test_null_tag_bitmap() {
+        RBitSet bitSet = redisService.getBitSet("null");
+        log.info("测试结果:{}", bitSet.isExists());
+    }
+
+    @Test
+    public void test_check_tag_bitmap() {
+        String tagId = "RQ_KJHKL98UU78H66554GFDV";
+        RBitSet bitSet = redisService.getBitSet(tagId);
+
+        log.info("Bitmap是否存在：{}", bitSet.isExists());
+
+        log.info("xiaofuge是否在人群中：{}",
+                bitSet.get(redisService.getIndexFromUserId("xiaofuge")));
+
+        log.info("dacihua是否在人群中：{}",
+                bitSet.get(redisService.getIndexFromUserId("dacihua")));
     }
 }

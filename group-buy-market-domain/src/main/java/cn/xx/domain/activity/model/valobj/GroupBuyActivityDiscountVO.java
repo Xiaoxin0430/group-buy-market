@@ -1,11 +1,14 @@
 package cn.xx.domain.activity.model.valobj;
 
+import cn.xx.types.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author xiaoxin
@@ -78,6 +81,41 @@ public class GroupBuyActivityDiscountVO {
      * 人群标签规则范围
      */
     private String tagScope;
+    /**
+     * 可见限制
+     */
+    public boolean isVisible() {
+        //若没有配置限制，则默认全部可见
+        if (StringUtils.isBlank(this.tagScope)) {
+            return TagScopeEnumVO.VISIBLE.getAllow();
+        }
+
+        String[] split = this.tagScope.split(Constants.SPLIT);
+        //若有配置，默认不可见
+        if (split.length > 0 && Objects.equals(split[0], "1") && StringUtils.isNotBlank(split[0])) {
+            return TagScopeEnumVO.VISIBLE.getRefuse();
+        }
+
+        return TagScopeEnumVO.VISIBLE.getAllow();
+    }
+
+    /**
+     * 参与限制
+     */
+    public boolean isEnable() {
+        //若没有配置限制，则默认全部可参与
+        if (StringUtils.isBlank(this.tagScope)) {
+            return TagScopeEnumVO.ENABLE.getAllow();
+        }
+
+        String[] split = this.tagScope.split(Constants.SPLIT);
+        //若有配置，默认不可参与
+        if (split.length == 2 && Objects.equals(split[1], "2") && StringUtils.isNotBlank(split[1])) {
+            return TagScopeEnumVO.ENABLE.getRefuse();
+        }
+
+        return TagScopeEnumVO.ENABLE.getAllow();
+    }
 
     @Getter
     @Builder

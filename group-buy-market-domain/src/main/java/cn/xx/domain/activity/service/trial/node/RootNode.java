@@ -18,7 +18,7 @@ import java.util.concurrent.TimeoutException;
 
 /**
  * @author xiaoxin
- * @description
+ * @description 根节点
  * @create 2026/7/14 14:54
  */
 
@@ -43,6 +43,7 @@ public class RootNode extends AbstractGroupBuyMarketSupport<MarketProductEntity,
         return router(requestParameter, dynamicContext);
     }
 
+    //router返回get方法，跳转到下一个节点
     @Override
     public StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> get(MarketProductEntity requestParameter, DefaultActivityStrategyFactory.DynamicContext dynamicContext) {
         return switchRoot;
