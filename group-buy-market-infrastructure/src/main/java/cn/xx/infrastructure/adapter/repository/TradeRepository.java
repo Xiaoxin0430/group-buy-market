@@ -1,0 +1,200 @@
+package cn.xx.infrastructure.adapter.repository;
+
+import cn.xx.domain.trade.adapter.repository.ITradeRepository;
+import cn.xx.domain.trade.mode.aggregate.GroupBuyOrderAggregate;
+import cn.xx.domain.trade.mode.entity.MarketPayOrderEntity;
+import cn.xx.domain.trade.mode.entity.PayActivityEntity;
+import cn.xx.domain.trade.mode.entity.PayDiscountEntity;
+import cn.xx.domain.trade.mode.entity.UserEntity;
+import cn.xx.domain.trade.mode.valobj.GroupBuyProgressVO;
+import cn.xx.domain.trade.mode.valobj.TradeOrderStatusEnumVO;
+import cn.xx.infrastructure.dao.IGroupBuyOrderDao;
+import cn.xx.infrastructure.dao.IGroupBuyOrderListDao;
+import cn.xx.infrastructure.dao.po.GroupBuyOrder;
+import cn.xx.infrastructure.dao.po.GroupBuyOrderList;
+import cn.xx.types.enums.ResponseCode;
+import cn.xx.types.exception.AppException;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
+
+/**
+ * @author xiaoxin
+ * @description 交易仓储服务
+ * @create 2026/8/5 16:11
+ */
+
+@Slf4j
+@Repository
+public class TradeRepository implements ITradeRepository {
+
+    @Resource
+    private IGroupBuyOrderDao groupBuyOrderDao;
+
+    @Resource
+    private IGroupBuyOrderListDao groupBuyOrderListDao;
+
+    @Override
+    public MarketPayOrderEntity queryMarketPayOrderEntityByOutTradeNo(String userId, String outTradeNo) {
+        GroupBuyOrderList groupBuyOrderListReq = new GroupBuyOrderList();
+
+        groupBuyOrderListReq.setUserId(userId);
+        groupBuyOrderListReq.setOutTradeNo(outTradeNo);
+
+        GroupBuyOrderList groupBuyOrderListRes =
+                groupBuyOrderListDao.queryGroupBuyOrderRecordByOutTradeNo(groupBuyOrderListReq);
+
+        if (null == groupBuyOrderListRes) {
+            return null;
+        }
+
+        return MarketPayOrderEntity.builder()
+                .orderId(groupBuyOrderListRes.getOrderId())
+                .deductionPrice(groupBuyOrderListRes.getDeductionPrice())
+                .tradeOrderStatusEnumVO(
+                        TradeOrderStatusEnumVO.valueOf(
+                                groupBuyOrderListRes.getStatus()
+                        )
+                )
+                .build();
+    }
+
+    //核心功能锁单
+    @Transactional(timeout = 500)
+    @Override
+    public MarketPayOrderEntity lockMarketPayOrder(GroupBuyOrderAggregate groupBuyOrderAggregate) {
+        //拆分聚合对象
+        UserEntity userEntity = groupBuyOrderAggregate.getUserEntity();
+        PayActivityEntity payActivityEntity = groupBuyOrderAggregate.getPayActivityEntity();
+        PayDiscountEntity payDiscountEntity = groupBuyOrderAggregate.getPayDiscountEntity();
+
+        String teamId = payActivityEntity.getTeamId();
+        if (StringUtils.isBlank(teamId)) {
+            // 开新团
+            teamId = RandomStringUtils.randomNumeric(8);
+            //创建新团po对象
+            GroupBuyOrder groupBuyOrder =
+                    GroupBuyOrder.builder()
+                            .teamId(teamId)
+                            .activityId(
+                                    payActivityEntity.getActivityId()
+                            )
+                            .source(
+                                    payDiscountEntity.getSource()
+                            )
+                            .channel(
+                                    payDiscountEntity.getChannel()
+                            )
+                            .originalPrice(
+                                    payDiscountEntity.getOriginalPrice()
+                            )
+                            .deductionPrice(
+                                    payDiscountEntity.getDeductionPrice()
+                            )
+                            .payPrice(
+                                    payDiscountEntity.getDeductionPrice()
+                            )
+                            .targetCount(
+                                    payActivityEntity.getTargetCount()
+                            )
+                            .completeCount(0)
+                            .lockCount(1)
+                            .build();
+
+            groupBuyOrderDao.insert(groupBuyOrder);
+        } else {
+            // 加入已有团
+            int updateAddTargetCount = groupBuyOrderDao.updateAddLockCount(teamId);
+
+            // 更新不到一条记录，说明不能加入
+            if (1 != updateAddTargetCount) {
+                throw new AppException(ResponseCode.E0005);
+            }
+        }
+
+        //生成个人营销订单号
+        String orderId = RandomStringUtils.randomNumeric(12);
+        //构建用户订单明细
+        GroupBuyOrderList groupBuyOrderListReq =
+                GroupBuyOrderList.builder()
+                        .userId(userEntity.getUserId())
+                        .teamId(teamId)
+                        .orderId(orderId)
+                        .activityId(
+                                payActivityEntity.getActivityId()
+                        )
+                        .startTime(
+                                payActivityEntity.getStartTime()
+                        )
+                        .endTime(
+                                payActivityEntity.getEndTime()
+                        )
+                        .goodsId(
+                                payDiscountEntity.getGoodsId()
+                        )
+                        .source(
+                                payDiscountEntity.getSource()
+                        )
+                        .channel(
+                                payDiscountEntity.getChannel()
+                        )
+                        .originalPrice(
+                                payDiscountEntity.getOriginalPrice()
+                        )
+                        .deductionPrice(
+                                payDiscountEntity.getDeductionPrice()
+                        )
+                        .status(
+                                TradeOrderStatusEnumVO.CREATE.getCode()
+                        )
+                        .outTradeNo(
+                                payDiscountEntity.getOutTradeNo()
+                        )
+                        .build();
+
+        try {
+            //写入用户订单明细
+            groupBuyOrderListDao.insert(groupBuyOrderListReq);
+        } catch (DuplicateKeyException e) {
+            throw new AppException(
+                    ResponseCode.INDEX_EXCEPTION
+            );
+        }
+
+        return MarketPayOrderEntity.builder()
+                .orderId(orderId)
+                .deductionPrice(
+                        payDiscountEntity.getDeductionPrice()
+                )
+                .tradeOrderStatusEnumVO(
+                        TradeOrderStatusEnumVO.CREATE
+                )
+                .build();
+    }
+
+    @Override
+    public GroupBuyProgressVO queryGroupBuyProgress(String teamId) {
+        GroupBuyOrder groupBuyOrder = groupBuyOrderDao.queryGroupBuyProgress(teamId);
+
+        if (null == groupBuyOrder) {
+            return null;
+        }
+
+        return GroupBuyProgressVO.builder()
+                .completeCount(
+                        groupBuyOrder.getCompleteCount()
+                )
+                .targetCount(
+                        groupBuyOrder.getTargetCount()
+                )
+                .lockCount(
+                        groupBuyOrder.getLockCount()
+                )
+                .build();
+    }
+}

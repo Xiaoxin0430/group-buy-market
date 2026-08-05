@@ -15,6 +15,11 @@ import java.util.concurrent.Callable;
 
 public class QueryGroupBuyActivityDiscountVOThreadTask implements Callable<GroupBuyActivityDiscountVO> {
 
+
+    /**
+     * 活动ID
+     */
+    private final Long activityId;
     /**
      * 来源
      */
@@ -35,7 +40,8 @@ public class QueryGroupBuyActivityDiscountVOThreadTask implements Callable<Group
      */
     private final IActivityRepository activityRepository;
 
-    public QueryGroupBuyActivityDiscountVOThreadTask(String source, String channel, String goodsId, IActivityRepository activityRepository) {
+    public QueryGroupBuyActivityDiscountVOThreadTask( Long activityId, String source, String channel, String goodsId, IActivityRepository activityRepository) {
+        this.activityId = activityId;
         this.source = source;
         this.channel = channel;
         this.goodsId = goodsId;
@@ -44,14 +50,31 @@ public class QueryGroupBuyActivityDiscountVOThreadTask implements Callable<Group
 
     @Override
     public GroupBuyActivityDiscountVO call() throws Exception {
-        // 查询渠道、商品与活动的关联配置
-        SCSkuActivityVO scSkuActivityVO = activityRepository.querySCSkuActivityBySCGoodsId(source, channel, goodsId);
 
-        if (null == scSkuActivityVO) return null;
+        // 判断是否存在可用的活动ID
+        Long availableActivityId = activityId;
 
-        // 根据关联关系中的活动ID查询活动配置
+        if (null == activityId) {
+
+            // 查询渠道 商品 活动配置 关联配置
+            SCSkuActivityVO scSkuActivityVO =
+                    activityRepository.querySCSkuActivityBySCGoodsId(
+                                    source,
+                                    channel,
+                                    goodsId
+                            );
+
+            if (null == scSkuActivityVO) {
+                return null;
+            }
+
+            availableActivityId = scSkuActivityVO.getActivityId();
+        }
+
+        // 查询活动配置
         return activityRepository.queryGroupBuyActivityDiscountVO(
-                scSkuActivityVO.getActivityId()
-        );
+                        availableActivityId
+                );
     }
+
 }
