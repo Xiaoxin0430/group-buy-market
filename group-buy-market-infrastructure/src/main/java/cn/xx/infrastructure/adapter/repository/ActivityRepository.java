@@ -13,6 +13,7 @@ import cn.xx.infrastructure.dao.po.GroupBuyActivity;
 import cn.xx.infrastructure.dao.po.GroupBuyDiscount;
 import cn.xx.infrastructure.dao.po.SCSkuActivity;
 import cn.xx.infrastructure.dao.po.Sku;
+import cn.xx.infrastructure.dcc.DCCService;
 import cn.xx.infrastructure.redis.IRedisService;
 import org.redisson.api.RBitSet;
 import org.springframework.stereotype.Repository;
@@ -41,6 +42,9 @@ public class ActivityRepository implements IActivityRepository {
 
     @Resource
     private IRedisService redisService;
+
+    @Resource
+    private DCCService dccService;
 
     //查询优惠活动信息，装配为vo对象
     @Override
@@ -117,5 +121,15 @@ public class ActivityRepository implements IActivityRepository {
         }
 
         return bitSet.get(redisService.getIndexFromUserId(userId));
+    }
+
+    @Override
+    public boolean downgradeSwitch() {
+        return dccService.isDowngradeSwitch();
+    }
+
+    @Override
+    public boolean cutRange(String userId) {
+        return dccService.isCutRange(userId);
     }
 }

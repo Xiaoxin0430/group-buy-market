@@ -27,4 +27,19 @@ public interface IActivityRepository {
 
     //人群判断
     boolean isTagCrowdRange(String tagId, String userId);
+
+    /**
+     * 判断是否开启拼团活动降级。
+     *
+     * true：开启降级，需要拦截请求
+     * false：未开启降级，可以继续处理
+     */
+    boolean downgradeSwitch();
+    /**
+     * 判断当前用户是否在灰度放量范围内。
+     *
+     * true：允许用户进入拼团流程
+     * false：用户不在放量范围
+     */
+    boolean cutRange(String userId);
 }
