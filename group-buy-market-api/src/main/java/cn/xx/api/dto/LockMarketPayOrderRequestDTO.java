@@ -10,6 +10,7 @@ import lombok.Data;
 
 @Data
 public class LockMarketPayOrderRequestDTO {
+
     // 用户ID
     private String userId;
 
