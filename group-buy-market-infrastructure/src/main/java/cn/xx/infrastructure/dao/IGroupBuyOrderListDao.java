@@ -21,4 +21,9 @@ public interface IGroupBuyOrderListDao {
             GroupBuyOrderList groupBuyOrderListReq
     );
 
+    //查询用户参加多少次
+    Integer queryOrderCountByActivityId(
+            GroupBuyOrderList groupBuyOrderListReq
+    );
+
 }

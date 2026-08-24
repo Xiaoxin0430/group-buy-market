@@ -32,6 +32,8 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!-- 默认不执行依赖远程 MySQL/Redis 的集成测试；可用 -DskipTests=false 显式启用。 -->
+        <skipTests>true</skipTests>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>

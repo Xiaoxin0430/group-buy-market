@@ -27,6 +27,7 @@ public class BusinessLinkedList<T, D, R> extends LinkedList<ILogicHandler<T, D, 
             if (null != apply) return apply;
 
             current = current.next;
+
         } while (null != current);
 
         return null;

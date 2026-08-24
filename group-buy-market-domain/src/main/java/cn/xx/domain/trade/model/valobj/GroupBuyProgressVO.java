@@ -1,4 +1,4 @@
-package cn.xx.domain.trade.mode.valobj;
+package cn.xx.domain.trade.model.valobj;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

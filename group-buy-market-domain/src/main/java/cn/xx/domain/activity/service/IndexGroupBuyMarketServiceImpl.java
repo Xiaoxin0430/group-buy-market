@@ -24,7 +24,8 @@ public class IndexGroupBuyMarketServiceImpl implements IIndexGroupBuyMarketServi
     public TrialBalanceEntity indexMarketTrial(MarketProductEntity marketProductEntity) throws Exception {
 
         //从工厂取得工程树入口  获取执行策略
-        StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> strategyHandler = defaultActivityStrategyFactory.strategyHandler();
+        StrategyHandler<MarketProductEntity, DefaultActivityStrategyFactory.DynamicContext, TrialBalanceEntity> strategyHandler =
+                defaultActivityStrategyFactory.strategyHandler();
 
         //试算操作
         return strategyHandler.apply(

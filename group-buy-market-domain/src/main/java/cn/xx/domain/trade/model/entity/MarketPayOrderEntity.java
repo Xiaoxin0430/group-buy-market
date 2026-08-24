@@ -1,6 +1,6 @@
-package cn.xx.domain.trade.mode.entity;
+package cn.xx.domain.trade.model.entity;
 
-import cn.xx.domain.trade.mode.valobj.TradeOrderStatusEnumVO;
+import cn.xx.domain.trade.model.valobj.TradeOrderStatusEnumVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

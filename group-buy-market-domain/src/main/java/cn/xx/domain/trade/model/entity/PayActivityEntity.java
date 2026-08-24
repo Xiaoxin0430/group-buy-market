@@ -1,4 +1,4 @@
-package cn.xx.domain.trade.mode.entity;
+package cn.xx.domain.trade.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

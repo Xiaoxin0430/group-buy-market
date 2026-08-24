@@ -62,10 +62,14 @@ public class GroupBuyOrderList {
     /** 外部交易单号-确保外部调用唯一幂等 */
     private String outTradeNo;
 
+    /** 唯一业务ID */
+    private String bizId;
+
     /** 创建时间 */
     private Date createTime;
 
     /** 更新时间 */
     private Date updateTime;
+
 
 }

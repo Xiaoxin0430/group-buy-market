@@ -16,7 +16,11 @@ public interface IGroupBuyActivityDao {
 
     List<GroupBuyActivity> queryGroupBuyActivityList();
 
+    //查询有效得活动信息
     GroupBuyActivity queryValidGroupBuyActivityById(
             Long activityId
     );
+
+    //查询活动信息
+    GroupBuyActivity queryGroupBuyActivityByActivityId(Long activityId);
 }

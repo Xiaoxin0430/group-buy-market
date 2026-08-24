@@ -1,10 +1,10 @@
 package cn.xx.domain.trade.service;
 
-import cn.xx.domain.trade.mode.entity.MarketPayOrderEntity;
-import cn.xx.domain.trade.mode.entity.PayActivityEntity;
-import cn.xx.domain.trade.mode.entity.PayDiscountEntity;
-import cn.xx.domain.trade.mode.entity.UserEntity;
-import cn.xx.domain.trade.mode.valobj.GroupBuyProgressVO;
+import cn.xx.domain.trade.model.entity.MarketPayOrderEntity;
+import cn.xx.domain.trade.model.entity.PayActivityEntity;
+import cn.xx.domain.trade.model.entity.PayDiscountEntity;
+import cn.xx.domain.trade.model.entity.UserEntity;
+import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
 
 /**
  * @author xiaoxin
@@ -35,6 +35,6 @@ public interface ITradeOrderService {
             UserEntity userEntity,
             PayActivityEntity payActivityEntity,
             PayDiscountEntity payDiscountEntity
-    );
+    ) throws Exception;
 
 }

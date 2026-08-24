@@ -1,17 +1,18 @@
 package cn.xx.infrastructure.adapter.repository;
 
 import cn.xx.domain.trade.adapter.repository.ITradeRepository;
-import cn.xx.domain.trade.mode.aggregate.GroupBuyOrderAggregate;
-import cn.xx.domain.trade.mode.entity.MarketPayOrderEntity;
-import cn.xx.domain.trade.mode.entity.PayActivityEntity;
-import cn.xx.domain.trade.mode.entity.PayDiscountEntity;
-import cn.xx.domain.trade.mode.entity.UserEntity;
-import cn.xx.domain.trade.mode.valobj.GroupBuyProgressVO;
-import cn.xx.domain.trade.mode.valobj.TradeOrderStatusEnumVO;
+import cn.xx.domain.trade.model.aggregate.GroupBuyOrderAggregate;
+import cn.xx.domain.trade.model.entity.*;
+import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
+import cn.xx.domain.trade.model.valobj.TradeOrderStatusEnumVO;
+import cn.xx.infrastructure.dao.IGroupBuyActivityDao;
 import cn.xx.infrastructure.dao.IGroupBuyOrderDao;
 import cn.xx.infrastructure.dao.IGroupBuyOrderListDao;
+import cn.xx.infrastructure.dao.po.GroupBuyActivity;
 import cn.xx.infrastructure.dao.po.GroupBuyOrder;
 import cn.xx.infrastructure.dao.po.GroupBuyOrderList;
+import cn.xx.types.common.Constants;
+import cn.xx.types.enums.ActivityStatusEnumVO;
 import cn.xx.types.enums.ResponseCode;
 import cn.xx.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,9 @@ public class TradeRepository implements ITradeRepository {
 
     @Resource
     private IGroupBuyOrderListDao groupBuyOrderListDao;
+
+    @Resource
+    private IGroupBuyActivityDao groupBuyActivityDao;
 
     @Override
     public MarketPayOrderEntity queryMarketPayOrderEntityByOutTradeNo(String userId, String outTradeNo) {
@@ -69,10 +73,16 @@ public class TradeRepository implements ITradeRepository {
     @Override
     public MarketPayOrderEntity lockMarketPayOrder(GroupBuyOrderAggregate groupBuyOrderAggregate) {
         //拆分聚合对象
-        UserEntity userEntity = groupBuyOrderAggregate.getUserEntity();
-        PayActivityEntity payActivityEntity = groupBuyOrderAggregate.getPayActivityEntity();
-        PayDiscountEntity payDiscountEntity = groupBuyOrderAggregate.getPayDiscountEntity();
+        UserEntity userEntity =
+                groupBuyOrderAggregate.getUserEntity();
+        PayActivityEntity payActivityEntity =
+                groupBuyOrderAggregate.getPayActivityEntity();
+        PayDiscountEntity payDiscountEntity =
+                groupBuyOrderAggregate.getPayDiscountEntity();
+        Integer userTakeOrderCount =
+                groupBuyOrderAggregate.getUserTakeOrderCount();
 
+        //判断新团还是已有团
         String teamId = payActivityEntity.getTeamId();
         if (StringUtils.isBlank(teamId)) {
             // 开新团
@@ -97,7 +107,7 @@ public class TradeRepository implements ITradeRepository {
                                     payDiscountEntity.getDeductionPrice()
                             )
                             .payPrice(
-                                    payDiscountEntity.getDeductionPrice()
+                                    payDiscountEntity.getPayPrice()
                             )
                             .targetCount(
                                     payActivityEntity.getTargetCount()
@@ -155,6 +165,14 @@ public class TradeRepository implements ITradeRepository {
                         .outTradeNo(
                                 payDiscountEntity.getOutTradeNo()
                         )
+                        //活动id 用户id 参与次数
+                        .bizId(
+                                payActivityEntity.getActivityId()
+                                        + Constants.UNDERLINE
+                                        + userEntity.getUserId()
+                                        + Constants.UNDERLINE
+                                        + (userTakeOrderCount + 1)
+                        )
                         .build();
 
         try {
@@ -196,5 +214,48 @@ public class TradeRepository implements ITradeRepository {
                         groupBuyOrder.getLockCount()
                 )
                 .build();
+    }
+
+    //查活动信息
+    @Override
+    public GroupBuyActivityEntity queryGroupBuyActivityEntityByActivityId(Long activityId) {
+        GroupBuyActivity groupBuyActivity =
+                groupBuyActivityDao
+                        .queryGroupBuyActivityByActivityId(activityId);
+
+
+        return GroupBuyActivityEntity.builder()
+                .activityId(groupBuyActivity.getActivityId())
+                .activityName(groupBuyActivity.getActivityName())
+                .discountId(groupBuyActivity.getDiscountId())
+                .groupType(groupBuyActivity.getGroupType())
+                .takeLimitCount(groupBuyActivity.getTakeLimitCount())
+                .target(groupBuyActivity.getTarget())
+                .validTime(groupBuyActivity.getValidTime())
+                .status(
+                        ActivityStatusEnumVO.valueOf(
+                                groupBuyActivity.getStatus()
+                        )
+                )
+                .startTime(groupBuyActivity.getStartTime())
+                .endTime(groupBuyActivity.getEndTime())
+                .tagId(groupBuyActivity.getTagId())
+                .tagScope(groupBuyActivity.getTagScope())
+                .build();
+
+    }
+
+    //查询用户参加活动次数
+    @Override
+    public Integer queryOrderCountByActivityId(Long activityId, String userId) {
+        GroupBuyOrderList groupBuyOrderListReq =
+                new GroupBuyOrderList();
+
+        groupBuyOrderListReq.setActivityId(activityId);
+        groupBuyOrderListReq.setUserId(userId);
+
+        return groupBuyOrderListDao
+                .queryOrderCountByActivityId(groupBuyOrderListReq);
+
     }
 }

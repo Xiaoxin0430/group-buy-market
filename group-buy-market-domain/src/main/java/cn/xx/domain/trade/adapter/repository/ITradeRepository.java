@@ -1,9 +1,10 @@
 package cn.xx.domain.trade.adapter.repository;
 
-import cn.xx.domain.trade.mode.aggregate.GroupBuyOrderAggregate;
-import cn.xx.domain.trade.mode.entity.MarketPayOrderEntity;
-import cn.xx.domain.trade.mode.valobj.GroupBuyProgressVO;
-
+import cn.xx.domain.trade.model.aggregate.GroupBuyOrderAggregate;
+import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
+import cn.xx.domain.trade.model.entity.MarketPayOrderEntity;
+import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
+import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
 /**
  * @author xiaoxin
  * @description 交易仓储服务接口
@@ -25,4 +26,10 @@ public interface ITradeRepository {
 
     //查询拼团进度
     GroupBuyProgressVO queryGroupBuyProgress(String teamId);
+
+    //根据活动id查询活动业务信息
+    GroupBuyActivityEntity queryGroupBuyActivityEntityByActivityId(Long activityId);
+
+    //查询用户在这个活动下单情况
+    Integer queryOrderCountByActivityId(Long activityId, String userId);
 }

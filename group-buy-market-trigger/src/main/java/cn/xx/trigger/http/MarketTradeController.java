@@ -8,20 +8,18 @@ import cn.xx.domain.activity.model.entity.MarketProductEntity;
 import cn.xx.domain.activity.model.entity.TrialBalanceEntity;
 import cn.xx.domain.activity.model.valobj.GroupBuyActivityDiscountVO;
 import cn.xx.domain.activity.service.IIndexGroupBuyMarketService;
-import cn.xx.domain.trade.mode.entity.MarketPayOrderEntity;
-import cn.xx.domain.trade.mode.entity.PayActivityEntity;
-import cn.xx.domain.trade.mode.entity.PayDiscountEntity;
-import cn.xx.domain.trade.mode.entity.UserEntity;
-import cn.xx.domain.trade.mode.valobj.GroupBuyProgressVO;
+import cn.xx.domain.trade.model.entity.MarketPayOrderEntity;
+import cn.xx.domain.trade.model.entity.PayActivityEntity;
+import cn.xx.domain.trade.model.entity.PayDiscountEntity;
+import cn.xx.domain.trade.model.entity.UserEntity;
+import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
 import cn.xx.domain.trade.service.ITradeOrderService;
 import cn.xx.types.enums.ResponseCode;
 import cn.xx.types.exception.AppException;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Objects;
@@ -45,9 +43,12 @@ public class MarketTradeController implements IMarketTradeService {
     @Resource
     private ITradeOrderService tradeOrderService;
 
+    @RequestMapping(
+            value = "lock_market_pay_order",
+            method = RequestMethod.POST)
     @Override
     public Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(
-            LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO) {
+            @RequestBody LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO) {
         try {
             // 取出请求参数
             String userId =
@@ -154,6 +155,16 @@ public class MarketTradeController implements IMarketTradeService {
                                     .build()
                     );
 
+            // 人群限定
+            if (!trialBalanceEntity.getIsVisible()
+                    || !trialBalanceEntity.getIsEnable()) {
+
+                return Response.<LockMarketPayOrderResponseDTO>builder()
+                        .code(ResponseCode.E0007.getCode())
+                        .info(ResponseCode.E0007.getInfo())
+                        .build();
+            }
+
             //取出活动配置
             GroupBuyActivityDiscountVO groupBuyActivityDiscountVO =
                     trialBalanceEntity.getGroupBuyActivityDiscountVO();
@@ -201,6 +212,9 @@ public class MarketTradeController implements IMarketTradeService {
                                     .deductionPrice(
                                             trialBalanceEntity
                                                     .getDeductionPrice()
+                                    )
+                                    .payPrice(
+                                            trialBalanceEntity.getPayPrice()
                                     )
                                     .outTradeNo(outTradeNo)
                                     .build()

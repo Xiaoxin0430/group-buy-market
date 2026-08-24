@@ -1,4 +1,4 @@
-package cn.xx.domain.trade.mode.entity;
+package cn.xx.domain.trade.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +37,9 @@ public class PayDiscountEntity {
 
     /** 折扣金额 */
     private BigDecimal deductionPrice;
+
+    /** 支付金额 */
+    private BigDecimal payPrice;
 
     /** 外部交易单号-确保外部调用唯一幂等 */
     private String outTradeNo;

@@ -1,8 +1,11 @@
 package cn.xx.domain.activity.service.discount;
 
+import cn.xx.domain.activity.adapter.repository.IActivityRepository;
 import cn.xx.domain.activity.model.valobj.DiscountTypeEnum;
 import cn.xx.domain.activity.model.valobj.GroupBuyActivityDiscountVO;
+import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 
 /**
@@ -11,23 +14,38 @@ import java.math.BigDecimal;
  * @create 2026/7/17 16:29
  */
 
-
+@Slf4j
 public abstract class AbstractDiscountCalculateService implements IDiscountCalculateService {
 
-    @Override
-    public BigDecimal calculate(String userId, BigDecimal originalPrice, GroupBuyActivityDiscountVO.GroupBuyDiscount groupBuyDiscount) {
+    @Resource
+    protected IActivityRepository repository;
 
-        // 1. 限定人群优惠，需要先检查用户资格
-        if(DiscountTypeEnum.TAG.equals(groupBuyDiscount.getDiscountType())){
-            boolean isCrowdRange = filterTagId(userId,groupBuyDiscount.getTagId());
+    @Override
+    public BigDecimal calculate(
+            String userId,
+            BigDecimal originalPrice,
+            GroupBuyActivityDiscountVO.GroupBuyDiscount groupBuyDiscount) {
+
+        // 1. 人群标签过滤
+        if(DiscountTypeEnum.TAG.equals(
+                groupBuyDiscount.getDiscountType())){
+
+            boolean isCrowdRange =
+                    filterTagId(
+                            userId,
+                            groupBuyDiscount.getTagId());
 
             // 用户不属于优惠人群，直接返回原价
             if (!isCrowdRange) {
+                log.info(
+                        "折扣优惠计算拦截，用户不在优惠人群标签范围内 userId:{}",
+                        userId
+                );
                 return originalPrice;
             }
         }
 
-        // 2. 用户有资格，执行具体折扣算法
+        // 2. 折扣优惠计算
         return doCalculate(originalPrice, groupBuyDiscount);
     }
 
@@ -35,12 +53,13 @@ public abstract class AbstractDiscountCalculateService implements IDiscountCalcu
      * 检查用户是否属于指定标签人群
      */
     private boolean filterTagId(String userId, String tagId) {
-        //后续实现，目前全通过
-        return true;
+        return repository.isTagCrowdRange(tagId, userId);
     }
 
     /**
      * 具体折扣策略实现
      */
-    protected abstract BigDecimal doCalculate(BigDecimal originalPrice, GroupBuyActivityDiscountVO.GroupBuyDiscount groupBuyDiscount);
+    protected abstract BigDecimal doCalculate(
+            BigDecimal originalPrice,
+            GroupBuyActivityDiscountVO.GroupBuyDiscount groupBuyDiscount);
 }

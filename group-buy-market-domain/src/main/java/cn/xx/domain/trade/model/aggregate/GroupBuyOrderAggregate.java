@@ -1,8 +1,8 @@
-package cn.xx.domain.trade.mode.aggregate;
+package cn.xx.domain.trade.model.aggregate;
 
-import cn.xx.domain.trade.mode.entity.PayActivityEntity;
-import cn.xx.domain.trade.mode.entity.PayDiscountEntity;
-import cn.xx.domain.trade.mode.entity.UserEntity;
+import cn.xx.domain.trade.model.entity.PayActivityEntity;
+import cn.xx.domain.trade.model.entity.PayDiscountEntity;
+import cn.xx.domain.trade.model.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,5 +29,8 @@ public class GroupBuyOrderAggregate {
 
     /** 支付优惠实体对象 */
     private PayDiscountEntity payDiscountEntity;
+
+    /** 已参与拼团量 */
+    private Integer userTakeOrderCount;
 
 }
