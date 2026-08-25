@@ -17,6 +17,7 @@ public class LinkArmory<T, D, R> {
     @SafeVarargs
     public LinkArmory(String linkName, ILogicHandler<T, D, R>... logicHandlers) {
         logicLink = new BusinessLinkedList<>(linkName);
+        //组装传入的节点为责任链
         for (ILogicHandler<T, D, R> logicHandler: logicHandlers){
             logicLink.add(logicHandler);
         }

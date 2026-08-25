@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 
 /**
  * @author xiaoxin
- * @description 用户参与限制，规则过滤
+ * @description 用户参与限制，规则过滤【用户参与次数】
  * @create 2026/8/24 15:18
  */
 

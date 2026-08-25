@@ -26,7 +26,9 @@ public interface ITradeOrderService {
     /**
      * 查询拼团进度
      */
-    GroupBuyProgressVO queryGroupBuyProgress(String teamId);
+    GroupBuyProgressVO queryGroupBuyProgress(
+            String teamId
+    );
 
     /**
      * 锁定，营销预支付订单；商品下单前，预购锁定。

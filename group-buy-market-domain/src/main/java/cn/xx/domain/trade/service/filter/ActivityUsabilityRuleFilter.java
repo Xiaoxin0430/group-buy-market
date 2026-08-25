@@ -39,8 +39,7 @@ public class ActivityUsabilityRuleFilter implements ILogicHandler<
 
         //查询活动
         GroupBuyActivityEntity groupBuyActivity =
-                repository
-                        .queryGroupBuyActivityEntityByActivityId(
+                repository.queryGroupBuyActivityEntityByActivityId(
                                 requestParameter.getActivityId()
                         );
 

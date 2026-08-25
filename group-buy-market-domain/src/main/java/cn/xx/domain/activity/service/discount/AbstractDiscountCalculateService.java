@@ -62,4 +62,5 @@ public abstract class AbstractDiscountCalculateService implements IDiscountCalcu
     protected abstract BigDecimal doCalculate(
             BigDecimal originalPrice,
             GroupBuyActivityDiscountVO.GroupBuyDiscount groupBuyDiscount);
+
 }

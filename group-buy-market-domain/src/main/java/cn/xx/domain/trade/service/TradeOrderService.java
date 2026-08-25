@@ -24,7 +24,8 @@ public class TradeOrderService implements ITradeOrderService{
 
     @Resource
     private ITradeRepository repository;
-    @Autowired
+
+    @Resource
     private BusinessLinkedList<TradeRuleCommandEntity,
             TradeRuleFilterFactory.DynamicContext,
             TradeRuleFilterBackEntity> tradeRuleFilter;

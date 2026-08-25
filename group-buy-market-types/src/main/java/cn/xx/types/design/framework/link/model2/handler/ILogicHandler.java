@@ -2,7 +2,8 @@ package cn.xx.types.design.framework.link.model2.handler;
 
 /**
  * @author xiaoxin
- * @description 业务逻辑处理器统一接口
+ * @description 业务逻辑处理器统一接口。
+ * 定义规则格式
  * @create 2026/8/8 15:32
  */
 
