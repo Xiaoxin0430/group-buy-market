@@ -13,7 +13,7 @@ import cn.xx.domain.trade.model.entity.PayActivityEntity;
 import cn.xx.domain.trade.model.entity.PayDiscountEntity;
 import cn.xx.domain.trade.model.entity.UserEntity;
 import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
-import cn.xx.domain.trade.service.ITradeOrderService;
+import cn.xx.domain.trade.service.ITradeLockOrderService;
 import cn.xx.types.enums.ResponseCode;
 import cn.xx.types.exception.AppException;
 import com.alibaba.fastjson.JSON;
@@ -41,7 +41,7 @@ public class MarketTradeController implements IMarketTradeService {
     private IIndexGroupBuyMarketService indexGroupBuyMarketService;
     //交易服务
     @Resource
-    private ITradeOrderService tradeOrderService;
+    private ITradeLockOrderService tradeOrderService;
 
     @RequestMapping(
             value = "lock_market_pay_order",

@@ -1,7 +1,9 @@
 package cn.xx.domain.trade.adapter.repository;
 
 import cn.xx.domain.trade.model.aggregate.GroupBuyOrderAggregate;
+import cn.xx.domain.trade.model.aggregate.GroupBuyTeamSettlementAggregate;
 import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
+import cn.xx.domain.trade.model.entity.GroupBuyTeamEntity;
 import cn.xx.domain.trade.model.entity.MarketPayOrderEntity;
 import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
 import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
@@ -13,6 +15,7 @@ import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
 
 
 public interface ITradeRepository {
+
     //查询已有的营销订单
     MarketPayOrderEntity queryMarketPayOrderEntityByOutTradeNo(
             String userId,
@@ -32,4 +35,13 @@ public interface ITradeRepository {
 
     //查询用户在这个活动下单情况
     Integer queryOrderCountByActivityId(Long activityId, String userId);
+
+    //根据team id查询拼团团队
+    GroupBuyTeamEntity queryGroupBuyTeamByTeamId(String teamId);
+
+    //拼团支付结算
+    void settlementMarketPayOrder(
+            GroupBuyTeamSettlementAggregate groupBuyTeamSettlementAggregate
+    );
+
 }

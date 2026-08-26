@@ -1,10 +1,10 @@
-package cn.xx.domain.trade.service.factory;
+package cn.xx.domain.trade.service.lock.factory;
 
 import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
 import cn.xx.domain.trade.model.entity.TradeRuleCommandEntity;
 import cn.xx.domain.trade.model.entity.TradeRuleFilterBackEntity;
-import cn.xx.domain.trade.service.filter.ActivityUsabilityRuleFilter;
-import cn.xx.domain.trade.service.filter.UserTakeLimitRuleFilter;
+import cn.xx.domain.trade.service.lock.filter.ActivityUsabilityRuleFilter;
+import cn.xx.domain.trade.service.lock.filter.UserTakeLimitRuleFilter;
 import cn.xx.types.design.framework.link.model2.LinkArmory;
 import cn.xx.types.design.framework.link.model2.chain.BusinessLinkedList;
 import lombok.AllArgsConstructor;

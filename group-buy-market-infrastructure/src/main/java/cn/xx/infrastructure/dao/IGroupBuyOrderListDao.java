@@ -3,6 +3,8 @@ package cn.xx.infrastructure.dao;
 import cn.xx.infrastructure.dao.po.GroupBuyOrderList;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author xiaoxin
  * @description 用户拼单明细dao
@@ -26,4 +28,11 @@ public interface IGroupBuyOrderListDao {
             GroupBuyOrderList groupBuyOrderListReq
     );
 
+    //支付完成
+    int updateOrderStatus2COMPLETE(
+            GroupBuyOrderList groupBuyOrderListReq);
+
+    //找到团队所有支付的订单
+    List<String> queryGroupBuyCompleteOrderOutTradeNoListByTeamId(
+            String teamId);
 }
