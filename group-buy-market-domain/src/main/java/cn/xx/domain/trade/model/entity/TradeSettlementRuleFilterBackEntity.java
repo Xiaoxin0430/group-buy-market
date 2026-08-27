@@ -10,16 +10,15 @@ import java.util.Date;
 
 /**
  * @author xiaoxin
- * @description 拼团组队实体对象
- * @create 2026/8/26 13:43
+ * @description 拼团交易结算规则责任链输出
+ * @create 2026/8/27 15:51
  */
-
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupBuyTeamEntity {
+public class TradeSettlementRuleFilterBackEntity {
 
     /** 拼单组队ID */
     private String teamId;

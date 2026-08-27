@@ -71,5 +71,8 @@ public class GroupBuyOrderList {
     /** 更新时间 */
     private Date updateTime;
 
+    /** 外部交易时间 */
+    private Date outTradeTime;
+
 
 }

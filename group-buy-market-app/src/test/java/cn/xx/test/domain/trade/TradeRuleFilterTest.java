@@ -2,9 +2,9 @@ package cn.xx.test.domain.trade;
 
 import cn.xx.domain.trade.adapter.repository.ITradeRepository;
 import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
-import cn.xx.domain.trade.model.entity.TradeRuleCommandEntity;
-import cn.xx.domain.trade.model.entity.TradeRuleFilterBackEntity;
-import cn.xx.domain.trade.service.lock.factory.TradeRuleFilterFactory;
+import cn.xx.domain.trade.model.entity.TradeLockRuleCommandEntity;
+import cn.xx.domain.trade.model.entity.TradeLockRuleFilterBackEntity;
+import cn.xx.domain.trade.service.lock.factory.TradeLockRuleFilterFactory;
 import cn.xx.domain.trade.service.lock.filter.ActivityUsabilityRuleFilter;
 import cn.xx.domain.trade.service.lock.filter.UserTakeLimitRuleFilter;
 import cn.xx.types.design.framework.link.model2.LinkArmory;
@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 public class TradeRuleFilterTest {
 
     private ITradeRepository repository;
-    private BusinessLinkedList<TradeRuleCommandEntity, TradeRuleFilterFactory.DynamicContext, TradeRuleFilterBackEntity> ruleFilter;
+    private BusinessLinkedList<TradeLockRuleCommandEntity, TradeLockRuleFilterFactory.DynamicContext, TradeLockRuleFilterBackEntity> ruleFilter;
 
     @Before
     public void setUp() {
@@ -42,7 +42,7 @@ public class TradeRuleFilterTest {
         ReflectionTestUtils.setField(activityFilter, "repository", repository);
         ReflectionTestUtils.setField(takeLimitFilter, "repository", repository);
 
-        ruleFilter = new LinkArmory<TradeRuleCommandEntity, TradeRuleFilterFactory.DynamicContext, TradeRuleFilterBackEntity>(
+        ruleFilter = new LinkArmory<TradeLockRuleCommandEntity, TradeLockRuleFilterFactory.DynamicContext, TradeLockRuleFilterBackEntity>(
                 "交易规则过滤链", activityFilter, takeLimitFilter).getLogicLink();
     }
 
@@ -53,7 +53,7 @@ public class TradeRuleFilterTest {
         when(repository.queryGroupBuyActivityEntityByActivityId(activityId)).thenReturn(activity(activityId, 3, ActivityStatusEnumVO.EFFECTIVE));
         when(repository.queryOrderCountByActivityId(activityId, userId)).thenReturn(2);
 
-        TradeRuleFilterBackEntity result = ruleFilter.apply(command(userId, activityId), new TradeRuleFilterFactory.DynamicContext());
+        TradeLockRuleFilterBackEntity result = ruleFilter.apply(command(userId, activityId), new TradeLockRuleFilterFactory.DynamicContext());
 
         assertEquals(Integer.valueOf(2), result.getUserTakeOrderCount());
         verify(repository).queryGroupBuyActivityEntityByActivityId(activityId);
@@ -83,15 +83,15 @@ public class TradeRuleFilterTest {
 
     private void assertBusinessError(ResponseCode expected, String userId, Long activityId) throws Exception {
         try {
-            ruleFilter.apply(command(userId, activityId), new TradeRuleFilterFactory.DynamicContext());
+            ruleFilter.apply(command(userId, activityId), new TradeLockRuleFilterFactory.DynamicContext());
             fail("Expected AppException");
         } catch (AppException e) {
             assertEquals(expected.getCode(), e.getCode());
         }
     }
 
-    private TradeRuleCommandEntity command(String userId, Long activityId) {
-        return TradeRuleCommandEntity.builder().userId(userId).activityId(activityId).build();
+    private TradeLockRuleCommandEntity command(String userId, Long activityId) {
+        return TradeLockRuleCommandEntity.builder().userId(userId).activityId(activityId).build();
     }
 
     private GroupBuyActivityEntity activity(Long activityId, Integer takeLimitCount, ActivityStatusEnumVO status) {

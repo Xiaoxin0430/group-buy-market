@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TradeRuleCommandEntity {
+public class TradeLockRuleCommandEntity {
     //检查谁参加哪个活动？
 
     /** 用户ID */

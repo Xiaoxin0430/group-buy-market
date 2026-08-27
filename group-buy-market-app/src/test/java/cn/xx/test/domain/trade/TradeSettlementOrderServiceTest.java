@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @author xiaoxin
@@ -26,8 +28,9 @@ public class TradeSettlementOrderServiceTest {
     @Resource
     private ITradeSettlementOrderService tradeSettlementOrderService;
 
+
     @Test
-    public void test_settlementMarketPayOrder() {
+    public void test_settlementMarketPayOrder() throws Exception {
 
         TradePaySuccessEntity tradePaySuccessEntity =
                 new TradePaySuccessEntity();
@@ -35,20 +38,32 @@ public class TradeSettlementOrderServiceTest {
         tradePaySuccessEntity.setSource("s01");
         tradePaySuccessEntity.setChannel("c01");
         tradePaySuccessEntity.setUserId("xfg04");
-        tradePaySuccessEntity.setOutTradeNo("750230421418");
+        tradePaySuccessEntity.setOutTradeNo("075605651839");
+
+        // 2-13 新增
+        SimpleDateFormat dateFormat =
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        tradePaySuccessEntity.setOutTradeTime(
+                dateFormat.parse("2025-01-30 12:00:00")
+        );
+//        tradePaySuccessEntity.setOutTradeTime(new Date());
 
         TradePaySettlementEntity tradePaySettlementEntity =
                 tradeSettlementOrderService
                         .settlementMarketPayOrder(
-                                tradePaySuccessEntity);
+                                tradePaySuccessEntity
+                        );
 
         log.info(
                 "请求参数:{}",
-                JSON.toJSONString(tradePaySuccessEntity));
+                JSON.toJSONString(tradePaySuccessEntity)
+        );
 
         log.info(
                 "测试结果:{}",
-                JSON.toJSONString(tradePaySettlementEntity));
+                JSON.toJSONString(tradePaySettlementEntity)
+        );
     }
 
 

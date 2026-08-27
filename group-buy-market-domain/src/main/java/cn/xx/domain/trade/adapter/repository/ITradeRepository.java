@@ -44,4 +44,7 @@ public interface ITradeRepository {
             GroupBuyTeamSettlementAggregate groupBuyTeamSettlementAggregate
     );
 
+    //渠道来源判断
+    boolean isSCBlackIntercept(String source, String channel);
+
 }

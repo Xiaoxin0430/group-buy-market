@@ -2,9 +2,9 @@ package cn.xx.domain.trade.service.lock.filter;
 
 import cn.xx.domain.trade.adapter.repository.ITradeRepository;
 import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
-import cn.xx.domain.trade.model.entity.TradeRuleCommandEntity;
-import cn.xx.domain.trade.model.entity.TradeRuleFilterBackEntity;
-import cn.xx.domain.trade.service.lock.factory.TradeRuleFilterFactory;
+import cn.xx.domain.trade.model.entity.TradeLockRuleCommandEntity;
+import cn.xx.domain.trade.model.entity.TradeLockRuleFilterBackEntity;
+import cn.xx.domain.trade.service.lock.factory.TradeLockRuleFilterFactory;
 import cn.xx.types.design.framework.link.model2.handler.ILogicHandler;
 import cn.xx.types.enums.ResponseCode;
 import cn.xx.types.exception.AppException;
@@ -22,17 +22,17 @@ import javax.annotation.Resource;
 @Slf4j
 @Service
 public class UserTakeLimitRuleFilter implements ILogicHandler<
-        TradeRuleCommandEntity,
-        TradeRuleFilterFactory.DynamicContext,
-        TradeRuleFilterBackEntity> {
+        TradeLockRuleCommandEntity,
+        TradeLockRuleFilterFactory.DynamicContext,
+        TradeLockRuleFilterBackEntity> {
 
     @Resource
     private ITradeRepository repository;
 
     @Override
-    public TradeRuleFilterBackEntity apply(
-            TradeRuleCommandEntity requestParameter,
-            TradeRuleFilterFactory.DynamicContext dynamicContext)
+    public TradeLockRuleFilterBackEntity apply(
+            TradeLockRuleCommandEntity requestParameter,
+            TradeLockRuleFilterFactory.DynamicContext dynamicContext)
             throws Exception {
 
         log.info(
@@ -62,7 +62,7 @@ public class UserTakeLimitRuleFilter implements ILogicHandler<
             throw new AppException(ResponseCode.E0103);
         }
 
-        return TradeRuleFilterBackEntity.builder()
+        return TradeLockRuleFilterBackEntity.builder()
                 .userTakeOrderCount(count)
                 .build();
     }

@@ -5,7 +5,7 @@ import cn.xx.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.xx.domain.trade.model.entity.*;
 import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
 import cn.xx.domain.trade.service.ITradeLockOrderService;
-import cn.xx.domain.trade.service.lock.factory.TradeRuleFilterFactory;
+import cn.xx.domain.trade.service.lock.factory.TradeLockRuleFilterFactory;
 import cn.xx.types.design.framework.link.model2.chain.BusinessLinkedList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,9 +27,9 @@ public class TradeLockOrderService implements ITradeLockOrderService {
 
     @Resource
     private BusinessLinkedList<
-                TradeRuleCommandEntity,
-                TradeRuleFilterFactory.DynamicContext,
-                TradeRuleFilterBackEntity> tradeRuleFilter;
+            TradeLockRuleCommandEntity,
+            TradeLockRuleFilterFactory.DynamicContext,
+            TradeLockRuleFilterBackEntity> tradeRuleFilter;
 
 
     @Override
@@ -59,13 +59,13 @@ public class TradeLockOrderService implements ITradeLockOrderService {
                 payDiscountEntity.getGoodsId());
 
         // 交易规则过滤
-        TradeRuleFilterBackEntity tradeRuleFilterBackEntity =
+        TradeLockRuleFilterBackEntity tradeRuleFilterBackEntity =
                 tradeRuleFilter.apply(
-                        TradeRuleCommandEntity.builder()
+                        TradeLockRuleCommandEntity.builder()
                                 .activityId(payActivityEntity.getActivityId())
                                 .userId(userEntity.getUserId())
                                 .build(),
-                        new TradeRuleFilterFactory.DynamicContext());
+                        new TradeLockRuleFilterFactory.DynamicContext());
 
         // 已参与拼团量
         Integer userTakeOrderCount =
