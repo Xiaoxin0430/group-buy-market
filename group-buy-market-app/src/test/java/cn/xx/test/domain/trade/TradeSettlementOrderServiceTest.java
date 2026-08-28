@@ -31,40 +31,15 @@ public class TradeSettlementOrderServiceTest {
 
     @Test
     public void test_settlementMarketPayOrder() throws Exception {
-
-        TradePaySuccessEntity tradePaySuccessEntity =
-                new TradePaySuccessEntity();
-
+        TradePaySuccessEntity tradePaySuccessEntity = new TradePaySuccessEntity();
         tradePaySuccessEntity.setSource("s01");
         tradePaySuccessEntity.setChannel("c01");
-        tradePaySuccessEntity.setUserId("xfg04");
-        tradePaySuccessEntity.setOutTradeNo("075605651839");
-
-        // 2-13 新增
-        SimpleDateFormat dateFormat =
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        tradePaySuccessEntity.setOutTradeTime(
-                dateFormat.parse("2025-01-30 12:00:00")
-        );
-//        tradePaySuccessEntity.setOutTradeTime(new Date());
-
-        TradePaySettlementEntity tradePaySettlementEntity =
-                tradeSettlementOrderService
-                        .settlementMarketPayOrder(
-                                tradePaySuccessEntity
-                        );
-
-        log.info(
-                "请求参数:{}",
-                JSON.toJSONString(tradePaySuccessEntity)
-        );
-
-        log.info(
-                "测试结果:{}",
-                JSON.toJSONString(tradePaySettlementEntity)
-        );
+        tradePaySuccessEntity.setUserId("xfg03");
+        tradePaySuccessEntity.setOutTradeNo("536311764349");
+        tradePaySuccessEntity.setOutTradeTime(new Date());
+        TradePaySettlementEntity tradePaySettlementEntity = tradeSettlementOrderService.settlementMarketPayOrder(tradePaySuccessEntity);
+        log.info("请求参数:{}", JSON.toJSONString(tradePaySuccessEntity));
+        log.info("测试结果:{}", JSON.toJSONString(tradePaySettlementEntity));
     }
-
 
 }

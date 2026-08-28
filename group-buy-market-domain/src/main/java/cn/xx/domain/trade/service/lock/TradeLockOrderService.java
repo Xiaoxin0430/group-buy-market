@@ -51,7 +51,11 @@ public class TradeLockOrderService implements ITradeLockOrderService {
     }
 
     @Override
-    public MarketPayOrderEntity lockMarketPayOrder(UserEntity userEntity, PayActivityEntity payActivityEntity, PayDiscountEntity payDiscountEntity) throws Exception {
+    public MarketPayOrderEntity lockMarketPayOrder(
+            UserEntity userEntity,
+            PayActivityEntity payActivityEntity,
+            PayDiscountEntity payDiscountEntity) throws Exception {
+
         log.info(
                 "拼团交易-锁定营销优惠支付订单:{} activityId:{} goodsId:{}",
                 userEntity.getUserId(),

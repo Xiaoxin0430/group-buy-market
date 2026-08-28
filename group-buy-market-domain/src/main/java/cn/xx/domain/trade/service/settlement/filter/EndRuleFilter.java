@@ -46,6 +46,7 @@ public class EndRuleFilter implements ILogicHandler<
                 .status(groupBuyTeamEntity.getStatus())
                 .validStartTime(groupBuyTeamEntity.getValidStartTime())
                 .validEndTime(groupBuyTeamEntity.getValidEndTime())
+                .notifyUrl(groupBuyTeamEntity.getNotifyUrl())
                 .build();
     }
 }

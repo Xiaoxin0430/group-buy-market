@@ -65,6 +65,8 @@ public class MarketTradeController implements IMarketTradeService {
                     lockMarketPayOrderRequestDTO.getOutTradeNo();
             String teamId =
                     lockMarketPayOrderRequestDTO.getTeamId();
+            String notifyUrl =
+                    lockMarketPayOrderRequestDTO.getNotifyUrl();
 
             log.info("营销交易锁单:{} LockMarketPayOrderRequestDTO:{}",
                     userId,
@@ -77,7 +79,9 @@ public class MarketTradeController implements IMarketTradeService {
                     || StringUtils.isBlank(channel)
                     || StringUtils.isBlank(goodsId)
                     || StringUtils.isBlank(goodsId)
-                    || null == activityId) {
+                    || null == activityId
+                    || StringUtils.isBlank(notifyUrl)
+            ) {
 
                 return Response
                         .<LockMarketPayOrderResponseDTO>builder()
@@ -220,6 +224,7 @@ public class MarketTradeController implements IMarketTradeService {
                                             trialBalanceEntity.getPayPrice()
                                     )
                                     .outTradeNo(outTradeNo)
+                                    .notifyUrl(notifyUrl)
                                     .build()
                     );
 

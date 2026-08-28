@@ -2,11 +2,12 @@ package cn.xx.domain.trade.adapter.repository;
 
 import cn.xx.domain.trade.model.aggregate.GroupBuyOrderAggregate;
 import cn.xx.domain.trade.model.aggregate.GroupBuyTeamSettlementAggregate;
-import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
-import cn.xx.domain.trade.model.entity.GroupBuyTeamEntity;
-import cn.xx.domain.trade.model.entity.MarketPayOrderEntity;
+import cn.xx.domain.trade.model.entity.*;
 import cn.xx.domain.trade.model.valobj.GroupBuyProgressVO;
 import cn.xx.domain.trade.model.entity.GroupBuyActivityEntity;
+
+import java.util.List;
+
 /**
  * @author xiaoxin
  * @description 交易仓储服务接口
@@ -40,11 +41,22 @@ public interface ITradeRepository {
     GroupBuyTeamEntity queryGroupBuyTeamByTeamId(String teamId);
 
     //拼团支付结算
-    void settlementMarketPayOrder(
+    boolean settlementMarketPayOrder(
             GroupBuyTeamSettlementAggregate groupBuyTeamSettlementAggregate
     );
 
     //渠道来源判断
     boolean isSCBlackIntercept(String source, String channel);
+
+    //查询/更新回调通知
+    List<NotifyTaskEntity> queryUnExecutedNotifyTaskList();
+
+    List<NotifyTaskEntity> queryUnExecutedNotifyTaskList(String teamId);
+
+    int updateNotifyTaskStatusSuccess(String teamId);
+
+    int updateNotifyTaskStatusError(String teamId);
+
+    int updateNotifyTaskStatusRetry(String teamId);
 
 }
