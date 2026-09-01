@@ -2,6 +2,8 @@ package cn.xx.api;
 
 import cn.xx.api.dto.LockMarketPayOrderRequestDTO;
 import cn.xx.api.dto.LockMarketPayOrderResponseDTO;
+import cn.xx.api.dto.SettlementMarketPayOrderRequestDTO;
+import cn.xx.api.dto.SettlementMarketPayOrderResponseDTO;
 import cn.xx.api.response.Response;
 
 /**
@@ -16,6 +18,11 @@ public interface IMarketTradeService {
     //锁单并生成营销订单
     Response<LockMarketPayOrderResponseDTO> lockMarketPayOrder(
             LockMarketPayOrderRequestDTO lockMarketPayOrderRequestDTO
+    );
+
+    /** 支付成功后的营销结算。 */
+    Response<SettlementMarketPayOrderResponseDTO> settlementMarketPayOrder(
+            SettlementMarketPayOrderRequestDTO requestDTO
     );
 
 }

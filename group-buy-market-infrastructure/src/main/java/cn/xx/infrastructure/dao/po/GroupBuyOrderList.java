@@ -1,8 +1,10 @@
 package cn.xx.infrastructure.dao.po;
 
+import cn.xx.infrastructure.dao.po.base.Page;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -14,11 +16,12 @@ import java.util.Date;
  * @create 2026/8/5 15:20
  */
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupBuyOrderList {
+public class GroupBuyOrderList extends Page {
 
     /** 自增ID */
     private Long id;

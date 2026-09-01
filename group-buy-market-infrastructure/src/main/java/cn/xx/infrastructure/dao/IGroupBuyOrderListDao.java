@@ -35,4 +35,10 @@ public interface IGroupBuyOrderListDao {
     //找到团队所有支付的订单
     List<String> queryGroupBuyCompleteOrderOutTradeNoListByTeamId(
             String teamId);
+
+    List<GroupBuyOrderList> queryInProgressUserGroupBuyOrderDetailListByUserId(GroupBuyOrderList groupBuyOrderListReq);
+
+    List<GroupBuyOrderList> queryInProgressUserGroupBuyOrderDetailListByRandom(GroupBuyOrderList groupBuyOrderListReq);
+
+    List<GroupBuyOrderList> queryInProgressUserGroupBuyOrderDetailListByActivityId(Long activityId);
 }
