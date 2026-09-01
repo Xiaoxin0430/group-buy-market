@@ -72,9 +72,7 @@ public class QueryGroupBuyActivityDiscountVOThreadTask implements Callable<Group
         }
 
         // 查询活动配置
-        return activityRepository.queryGroupBuyActivityDiscountVO(
-                        availableActivityId
-                );
+        return activityRepository.queryGroupBuyActivityDiscountVO(availableActivityId);
     }
 
 }

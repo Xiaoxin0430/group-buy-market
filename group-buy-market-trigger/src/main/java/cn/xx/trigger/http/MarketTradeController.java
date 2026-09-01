@@ -39,10 +39,12 @@ public class MarketTradeController implements IMarketTradeService {
     //营销试算服务
     @Resource
     private IIndexGroupBuyMarketService indexGroupBuyMarketService;
+
     //交易服务
     @Resource
     private ITradeLockOrderService tradeOrderService;
 
+    //锁单服务
     @RequestMapping(
             value = "lock_market_pay_order",
             method = RequestMethod.POST)
