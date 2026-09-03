@@ -1,8 +1,8 @@
 # 基础镜像
-FROM openjdk:8-jre-slim
+FROM registry.cn-hangzhou.aliyuncs.com/xfg-studio/group-buy-market-app:1.3
 
 # 作者
-MAINTAINER xiaofuge
+LABEL org.opencontainers.image.authors="xiaofuge"
 
 # 配置
 ENV PARAMS=""

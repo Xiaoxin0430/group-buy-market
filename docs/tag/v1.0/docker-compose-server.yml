@@ -1,0 +1,40 @@
+services:
+  group-buy-market-front:
+    image: registry.cn-hangzhou.aliyuncs.com/xfg-studio/nginx:latest
+    container_name: group-buy-market-front
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/html:/usr/share/nginx/html:ro
+
+  group-buy-market:
+    image: xiaoxin/group-buy-market-app:1.0-SNAPSHOT
+    container_name: group-buy-market-app
+    restart: on-failure
+    ports:
+      - "8091:8091"
+    environment:
+      TZ: PRC
+      SERVER_PORT: "8091"
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: "123456"
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/group_buy_market?serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true&useSSL=false
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_HIKARI_POOL_NAME: Retail_HikariCP
+      REDIS_SDK_CONFIG_HOST: redis
+      REDIS_SDK_CONFIG_PORT: "6379"
+    volumes:
+      - ./log:/data/log
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - market-network
+
+networks:
+  market-network:
+    name: dev-ops_my-network
+    external: true
